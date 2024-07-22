@@ -13,6 +13,7 @@ module.exports = {
   },
   plugins: ['react', 'react-hooks'],
   rules: {
+    quotes: ['error', 'single', { avoidEscape: true }],
     'no-console': 'warn',
     'no-var': 'error',
     'prefer-const': 'error',

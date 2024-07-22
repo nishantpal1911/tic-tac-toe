@@ -15,3 +15,33 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.sidebar {
+  transition: width 0.5s;
+}
+
+.sidebar-content {
+  transition: 
+    opacity 0.2s 0.5s,
+    display 0.5s;
+}
+
+@starting-style {
+  .sidebar-content {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.modal {
+  transition:
+    opacity 0.2s,
+    display 0.2s allow-discrete;
+}
+
+@starting-style {
+  .modal {
+    opacity: 0;
+    display: none;
+  }
+}
