@@ -1,8 +1,14 @@
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import ReplayIcon from '@mui/icons-material/Replay';
 import { useState } from 'react';
 
-import Board from './components/Board';
-import Modal from './components/Modal';
-import Button from './components/Button';
+import Board from 'src/components/Board';
+import Button from 'src/components/ui/Button';
+import { Dropdown, DropdownItem } from 'src/components/ui/Dropdown';
+import Modal from 'src/components/ui/Modal';
+import Select from 'src/components/ui/Select';
+
+const boardWidthOptions = [3, 4, 5, 6, 7, 8, 9, 10];
 
 export default function App() {
   const [input, setInput] = useState('3');
@@ -13,10 +19,11 @@ export default function App() {
   const [isPlayed, setIsPlayed] = useState(false);
   const [boardKey, setBoardKey] = useState(0);
 
-  const onChangeNum = (value: string) => {
+  const onSelectNum = (node: React.ReactNode) => {
+    const value = node as string;
     setInput(value);
     const numValue = Number(value);
-    const isError = !value || isNaN(numValue) || numValue < 3 || numValue > 10;
+    const isError = !value || isNaN(numValue) || !boardWidthOptions.includes(numValue);
     setIsError(isError);
   };
 
@@ -46,6 +53,7 @@ export default function App() {
         setBoardKey(boardKey + 1);
         setIsResetModalOpen(false);
         setIsPlayed(false);
+        setInput(String(boardWidth));
       },
       CANCEL: () => {
         setIsResetModalOpen(false);
@@ -54,47 +62,61 @@ export default function App() {
   };
 
   return (
-    <div className='relative h-svh'>
+    <div className='relative min-h-lvh bg-slate-50'>
       <Modal
-        text='Are you sure you want to change the board width? Your current progress will be lost.'
+        headerText='Change board width'
         isModalOpen={isConfirmModalOpen}
-        onConfirmBtnModal={MODAL_CALLBACKS.APPLY.CONFIRM}
+        onConfirmBtnClick={MODAL_CALLBACKS.APPLY.CONFIRM}
         onCancelBtnClick={MODAL_CALLBACKS.APPLY.CANCEL}
-      />
+      >
+        Are you sure you want to change the board width? Your current progress will be lost.
+      </Modal>
       <Modal
-        text='Are you sure you want to reset the board?'
+        headerText='Reset board'
         isModalOpen={isResetModalOpen}
-        onConfirmBtnModal={MODAL_CALLBACKS.RESET.CONFIRM}
+        onConfirmBtnClick={MODAL_CALLBACKS.RESET.CONFIRM}
         onCancelBtnClick={MODAL_CALLBACKS.RESET.CANCEL}
-      />
+      >
+        Are you sure you want to reset the board?
+      </Modal>
       <main className='flex'>
         <div className='mx-auto w-fit py-16'>
-          <div className='mb-6 flex flex-col'>
-            <label className='mb-2 text-center text-lg'>Enter a number between 3 and 10</label>
-            <div className='m-auto w-fit'>
-              <div className='flex h-9'>
-                <input
-                  className='mr-2 rounded-md border border-gray-400 p-2 focus-visible:outline-yellow-300'
-                  type='text'
-                  value={input}
-                  onChange={({ target }) => onChangeNum(target.value)}
-                />
-                <div className='flex justify-evenly gap-2'>
-                  <Button
-                    text='Reset'
-                    disabled={!isPlayed}
-                    type='secondary'
-                    onClick={() => setIsResetModalOpen(true)}
-                  />
-                  <Button
-                    text='Apply'
-                    disabled={isError || boardWidth === Number(input)}
-                    type='primary'
-                    onClick={onClickApplyButton}
-                  />
-                </div>
-              </div>
+          <div className='mb-6 flex items-center gap-3'>
+            <div>
+              <Select
+                label='Select board width'
+                className='w-20'
+                selectedOption={input}
+                onSelect={onSelectNum}
+                collapseOnSelect
+              >
+                <Dropdown>
+                  {boardWidthOptions.map((value, index) => (
+                    <DropdownItem key={index} isSelected={value === Number(input)} showBgOnSelected={true}>
+                      {value}
+                    </DropdownItem>
+                  ))}
+                </Dropdown>
+              </Select>
               <p className={`text-red-500 ${!isError && 'invisible'}`}>Invalid input!</p>
+            </div>
+            <div className='mt-2 flex w-fit justify-evenly gap-2'>
+              <Button
+                icon={{ svg: ReplayIcon }}
+                disabled={!isPlayed}
+                intent='secondary'
+                onClick={() => setIsResetModalOpen(true)}
+              >
+                Reset
+              </Button>
+              <Button
+                icon={{ svg: CheckCircleOutlineIcon, placement: 'right' }}
+                disabled={isError || boardWidth === Number(input)}
+                intent='primary'
+                onClick={onClickApplyButton}
+              >
+                Apply
+              </Button>
             </div>
           </div>
 

@@ -1,11 +1,10 @@
-import { useState } from 'react';
 import _ from 'lodash';
+import { useState } from 'react';
 
-import { Cell, CellValue } from '../types';
-
-import Square from './Square';
-import History from './History';
-import Sidebar from './Sidebar';
+import History from 'src/components/History';
+import Square from 'src/components/Square';
+import Sidebar from 'src/components/ui/Sidebar';
+import { Cell, CellValue } from 'src/types';
 
 interface BoardProps {
   N: number;
@@ -37,7 +36,7 @@ const playsInARowToWin: Record<number, number> = {
 export default function Board({ N, setIsPlayed }: BoardProps) {
   const [board, setBoard] = useState(getInitialBoard(N));
   const [tempBoard, setTempBoard] = useState(null as Cell[][] | null);
-  const [player, setPlayer] = useState('X' as CellValue);
+  const [nextPlayer, setNextPlayer] = useState('X' as CellValue);
   const [history, setHistory] = useState([] as Cell[]);
   const [winner, setWinner] = useState('' as CellValue);
   const isDisabled = !!winner || history.length === N * N || !!tempBoard;
@@ -46,12 +45,12 @@ export default function Board({ N, setIsPlayed }: BoardProps) {
     const { x, y } = cell.pos;
     let count = 1;
     // Left
-    for (let j = y - 1; j >= 0 && board[x][j].value === player; j--) {
+    for (let j = y - 1; j >= 0 && board[x][j].value === nextPlayer; j--) {
       count++;
       if (fillCells) newBoard[x][j].fill = 'WIN';
     }
     // Right
-    for (let j = y + 1; j < N && board[x][j].value === player; j++) {
+    for (let j = y + 1; j < N && board[x][j].value === nextPlayer; j++) {
       count++;
       if (fillCells) newBoard[x][j].fill = 'WIN';
     }
@@ -65,12 +64,12 @@ export default function Board({ N, setIsPlayed }: BoardProps) {
     const { x, y } = cell.pos;
     let count = 1;
     // Up
-    for (let i = x - 1; i >= 0 && board[i][y].value === player; i--) {
+    for (let i = x - 1; i >= 0 && board[i][y].value === nextPlayer; i--) {
       count++;
       if (fillCells) newBoard[i][y].fill = 'WIN';
     }
     // Down
-    for (let i = x + 1; i < N && board[i][y].value === player; i++) {
+    for (let i = x + 1; i < N && board[i][y].value === nextPlayer; i++) {
       count++;
       if (fillCells) newBoard[i][y].fill = 'WIN';
     }
@@ -84,12 +83,12 @@ export default function Board({ N, setIsPlayed }: BoardProps) {
     const { x, y } = cell.pos;
     let count = 1;
     // Top-Left
-    for (let i = x - 1, j = y - 1; i >= 0 && j >= 0 && board[i][j].value === player; i--, j--) {
+    for (let i = x - 1, j = y - 1; i >= 0 && j >= 0 && board[i][j].value === nextPlayer; i--, j--) {
       count++;
       if (fillCells) newBoard[i][j].fill = 'WIN';
     }
     // Bottom-Right
-    for (let i = x + 1, j = y + 1; i < N && j < N && board[i][j].value === player; i++, j++) {
+    for (let i = x + 1, j = y + 1; i < N && j < N && board[i][j].value === nextPlayer; i++, j++) {
       count++;
       if (fillCells) newBoard[i][j].fill = 'WIN';
     }
@@ -103,12 +102,12 @@ export default function Board({ N, setIsPlayed }: BoardProps) {
     const { x, y } = cell.pos;
     let count = 1;
     // Top-Right
-    for (let i = x - 1, j = y + 1; i >= 0 && j < N && board[i][j].value === player; i--, j++) {
+    for (let i = x - 1, j = y + 1; i >= 0 && j < N && board[i][j].value === nextPlayer; i--, j++) {
       count++;
       if (fillCells) newBoard[i][j].fill = 'WIN';
     }
     // Bottom-Left
-    for (let i = x + 1, j = y - 1; i < N && j >= 0 && board[i][j].value === player; i++, j--) {
+    for (let i = x + 1, j = y - 1; i < N && j >= 0 && board[i][j].value === nextPlayer; i++, j--) {
       count++;
       if (fillCells) newBoard[i][j].fill = 'WIN';
     }
@@ -137,11 +136,11 @@ export default function Board({ N, setIsPlayed }: BoardProps) {
 
     if (isGameWon) {
       newBoard[x][y].fill = 'WIN';
-      setWinner(player);
+      setWinner(nextPlayer);
     } else {
-      setPlayer(player === 'X' ? 'O' : 'X');
+      setNextPlayer(nextPlayer === 'X' ? 'O' : 'X');
     }
-    newBoard[x][y].value = player;
+    newBoard[x][y].value = nextPlayer;
     setBoard(newBoard);
     setHistory([...history, newBoard[x][y]]);
     setIsPlayed();
@@ -186,7 +185,7 @@ export default function Board({ N, setIsPlayed }: BoardProps) {
     const newBoard = _.cloneDeep(tempBoard);
     newBoard[cell.pos.x][cell.pos.y].fill = undefined;
 
-    setPlayer(cell.value === 'O' ? 'X' : 'O');
+    setNextPlayer(cell.value === 'O' ? 'X' : 'O');
     setBoard(newBoard);
     setHistory(history.slice(0, index + 1));
     setTempBoard(null);
@@ -209,16 +208,16 @@ export default function Board({ N, setIsPlayed }: BoardProps) {
             `Winner: ${winner} 🎉`
           : history.length === N * N ?
             "It's a draw 😒"
-          : `Next turn: ${player}`}
+          : `Next turn: ${nextPlayer}`}
         </h2>
-        <h4 className='mb-4 text-lg'>{!winner && `Get ${playsInARowToWin[N]} "${player}" in a row to win.`}</h4>
+        <h4 className='mb-4 text-lg'>{!winner && `Get ${playsInARowToWin[N]} "${nextPlayer}" in a row to win.`}</h4>
         <div className={`flex flex-col ${winner && 'cursor-auto'}`}>
           {(tempBoard || board).map((row, rowIndex) => (
             <div className='flex' key={rowIndex}>
               {row.map((cell, colIndex) => (
                 <Square
                   disabled={isDisabled || !!cell.value}
-                  player={player}
+                  nextPlayer={nextPlayer}
                   cell={cell}
                   key={`${rowIndex}.${colIndex}`}
                   onClick={handleNextMove}

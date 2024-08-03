@@ -1,0 +1,3 @@
+.container {
+  transition: max-height 0.15s ease-in-out;
+}

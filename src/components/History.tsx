@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 
-import { Cell } from '../types';
-
-import HistoryItem from './HistoryItem';
+import HistoryItem from 'src/components/HistoryItem';
+import { Cell } from 'src/types';
 
 interface HistoryProps {
   history: Cell[];

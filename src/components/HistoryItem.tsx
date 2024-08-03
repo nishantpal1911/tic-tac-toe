@@ -1,11 +1,10 @@
-import { useState } from 'react';
 import RestoreIcon from '@mui/icons-material/Restore';
 import SubdirectoryArrowLeftIcon from '@mui/icons-material/SubdirectoryArrowLeft';
+import { useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 
-import { Cell, CellValue } from '../types';
-
-import Modal from './Modal';
+import Modal from 'src/components/ui/Modal';
+import { Cell, CellValue } from 'src/types';
 
 interface HistoryItemProps {
   cell: Cell;
@@ -84,9 +83,9 @@ export default function HistoryItem(props: HistoryItemProps) {
       <hr className='h-[1px] border-black' />
       <OutsideClickHandler onOutsideClick={() => setIsSelected(false)}>
         <Modal
-          text='Are you sure you want to reset history?'
+          headerText='Are you sure you want to reset history?'
           isModalOpen={isResetModalOpen}
-          onConfirmBtnModal={onConfirmRestore}
+          onConfirmBtnClick={onConfirmRestore}
           onCancelBtnClick={onCancelRestore}
         />
         <div className={`flex ${bgStyleByPlayer}`}>

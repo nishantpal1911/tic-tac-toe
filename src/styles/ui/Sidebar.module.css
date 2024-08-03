@@ -1,0 +1,16 @@
+.sidebar {
+  transition: width 0.3s;
+}
+
+.content {
+  transition: 
+    opacity 0.1s 0.3s,
+    display 0.3s;
+}
+
+@starting-style {
+  .content {
+    opacity: 0;
+    display: none;
+  }
+}

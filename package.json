@@ -5,9 +5,15 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.16.1",
-    "@mui/material": "^5.16.1",
+    "@mui/material": "^5.16.6",
+    "@mui/x-date-pickers": "^7.12.0",
+    "class-variance-authority": "^0.7.0",
+    "dayjs": "^1.11.12",
     "lodash": "^4.17.21",
+    "overlayscrollbars": "^2.10.0",
+    "overlayscrollbars-react": "^0.5.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-outside-click-handler": "^1.3.0",
@@ -15,6 +21,7 @@
     "web-vitals": "^4.2.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
@@ -23,8 +30,13 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/react-outside-click-handler": "^1.3.3",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-no-relative-import-paths": "^1.5.5",
     "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-sort-destructure-keys": "^2.0.0",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.8",
     "prettier": "3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.4",
@@ -35,8 +47,20 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.ts",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+    "lint": "eslint \"src/**/*.+(js|ts|jsx|tsx|json)\"",
+    "format": "prettier --write \"**/*.+(js|ts|jsx|tsx)\" --ignore-unknown",
+    "prepare": "husky"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "browserslist": {
     "production": [
