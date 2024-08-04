@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import { cva } from 'class-variance-authority';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import Button from 'src/components/ui/Button';
 import css from 'src/styles/ui/Sidebar.module.css';
@@ -21,16 +21,27 @@ const containerStyles = cva(
   }
 );
 
-const contentStyles = cva(`${css.content} hidden flex-col overflow-y-auto overflow-x-hidden opacity-0`, {
+const contentStyles = cva(`${css.content} flex flex-col overflow-y-auto overflow-x-hidden opacity-0`, {
   variants: {
     isExpanded: {
-      true: '!flex opacity-100',
+      true: '!opacity-100',
     },
   },
 });
 
 export default function Sidebar({ children }: SidebarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isContentVisible, setIsContentVisible] = useState(false);
+
+  useEffect(() => {
+    if (!isExpanded) {
+      setIsContentVisible(false);
+    } else {
+      setTimeout(() => {
+        setIsContentVisible(true);
+      }, 300);
+    }
+  }, [isExpanded]);
 
   return (
     <div className={containerStyles({ isExpanded })}>
@@ -40,7 +51,7 @@ export default function Sidebar({ children }: SidebarProps) {
         onClick={() => setIsExpanded(!isExpanded)}
         className='my-5 ml-auto mr-5'
       />
-      <div className={contentStyles({ isExpanded })}>{children}</div>
+      <div className={contentStyles({ isExpanded })}>{isContentVisible && children}</div>
     </div>
   );
 }

@@ -1,12 +1,3 @@
 .transition {
-  transition:
-    opacity 0.25s,
-    display 0.25s allow-discrete;
-}
-
-@starting-style {
-  .transition {
-    opacity: 0;
-    display: none;
-  }
+  transition: opacity 0.25s,
 }
