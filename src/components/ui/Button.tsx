@@ -29,7 +29,7 @@ const btnStyles = cva(
         plainSecondary:
           'text-gray-500 ring-1 ring-gray-400 hover:bg-gray-400/[0.05] hover:text-gray-600 hover:ring-gray-600',
         danger: 'bg-red-500/85 text-white shadow hover:bg-red-500',
-        plainIcon: 'px-2 focus:!ring-0 focus:!ring-offset-0',
+        plainIcon: 'rounded-full focus:!ring-0 focus:!ring-offset-0',
         plainText: '',
       },
       fullWidth: {

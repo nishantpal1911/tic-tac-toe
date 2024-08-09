@@ -1,21 +1,13 @@
 import { cva } from 'class-variance-authority';
 import 'overlayscrollbars/styles/overlayscrollbars.css';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
-import React, { ComponentProps, PropsWithChildren, useEffect, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 
 import css from 'src/styles/ui/Dropdown.module.css';
 
-interface DropdownProps {
+interface Props {
   className?: string;
   isOpen?: boolean;
-  onSelect?: {
-    (node: React.ReactNode): void;
-  };
-}
-
-interface DropdownItemProps extends Omit<ComponentProps<'button'>, 'onSelect'> {
-  isSelected?: boolean;
-  showBgOnSelected?: boolean;
   onSelect?: {
     (node: React.ReactNode): void;
   };
@@ -32,7 +24,7 @@ const containerStyles = cva(
   }
 );
 
-export function Dropdown(props: PropsWithChildren<DropdownProps>) {
+export default function Dropdown(props: PropsWithChildren<Props>) {
   const [isOpen, setIsOpen] = useState(props.isOpen);
 
   useEffect(() => {
@@ -61,36 +53,5 @@ export function Dropdown(props: PropsWithChildren<DropdownProps>) {
           : React.cloneElement(props.children as JSX.Element, { onSelct: props.onSelect }))}
       </OverlayScrollbarsComponent>
     </div>
-  );
-}
-
-const dropdownItemStyles = cva('w-full select-none px-4 py-2 text-start hover:bg-gray-100', {
-  variants: {
-    showBgOnSelected: { true: '' },
-    isSelected: { true: '' },
-  },
-  compoundVariants: [
-    {
-      showBgOnSelected: true,
-      isSelected: true,
-      className: 'bg-gray-100',
-    },
-  ],
-});
-
-export function DropdownItem(props: PropsWithChildren<DropdownItemProps>) {
-  const { children, isSelected, onSelect, showBgOnSelected } = props;
-
-  const selectHandler = () => {
-    onSelect?.(props.children);
-  };
-
-  return (
-    <button
-      className={dropdownItemStyles({ isSelected, showBgOnSelected, className: props.className })}
-      onClick={selectHandler}
-    >
-      {children}
-    </button>
   );
 }

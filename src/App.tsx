@@ -1,12 +1,13 @@
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ReplayIcon from '@mui/icons-material/Replay';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import Board from 'src/components/Board';
 import Button from 'src/components/ui/Button';
 import { Dropdown, DropdownItem } from 'src/components/ui/Dropdown';
 import Modal from 'src/components/ui/Modal';
 import Select from 'src/components/ui/Select';
+import ToastContext from 'src/context/toast';
 
 const boardWidthOptions = [3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -18,6 +19,7 @@ export default function App() {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isPlayed, setIsPlayed] = useState(false);
   const [boardKey, setBoardKey] = useState(0);
+  const toast = useContext(ToastContext);
 
   const onSelectNum = (node: React.ReactNode) => {
     const value = node as string;
@@ -43,6 +45,7 @@ export default function App() {
         setBoardKey(boardKey + 1);
         setIsPlayed(false);
         setIsConfirmModalOpen(false);
+        toast.add({ message: 'Board width changed successfully!', type: 'success' });
       },
       CANCEL: () => {
         setIsConfirmModalOpen(false);
@@ -54,6 +57,7 @@ export default function App() {
         setIsResetModalOpen(false);
         setIsPlayed(false);
         setInput(String(boardWidth));
+        toast.add({ message: 'Board has been reset!', type: 'info' });
       },
       CANCEL: () => {
         setIsResetModalOpen(false);
@@ -64,18 +68,18 @@ export default function App() {
   return (
     <div className='relative min-h-lvh bg-slate-50'>
       <Modal
-        headerText='Change board width'
-        isModalOpen={isConfirmModalOpen}
-        onConfirmBtnClick={MODAL_CALLBACKS.APPLY.CONFIRM}
-        onCancelBtnClick={MODAL_CALLBACKS.APPLY.CANCEL}
+        header='Change board width'
+        isOpen={isConfirmModalOpen}
+        onConfirm={MODAL_CALLBACKS.APPLY.CONFIRM}
+        onDismiss={MODAL_CALLBACKS.APPLY.CANCEL}
       >
         Are you sure you want to change the board width? Your current progress will be lost.
       </Modal>
       <Modal
-        headerText='Reset board'
-        isModalOpen={isResetModalOpen}
-        onConfirmBtnClick={MODAL_CALLBACKS.RESET.CONFIRM}
-        onCancelBtnClick={MODAL_CALLBACKS.RESET.CANCEL}
+        header='Reset board'
+        isOpen={isResetModalOpen}
+        onConfirm={MODAL_CALLBACKS.RESET.CONFIRM}
+        onDismiss={MODAL_CALLBACKS.RESET.CANCEL}
       >
         Are you sure you want to reset the board?
       </Modal>

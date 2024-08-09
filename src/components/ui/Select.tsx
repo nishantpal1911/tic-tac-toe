@@ -4,6 +4,7 @@ import React, { PropsWithChildren, useEffect, useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
 
 import Button from 'src/components/ui/Button';
+import { randomNumberGenerator } from 'src/utils';
 
 interface Props {
   id?: string;
@@ -18,9 +19,6 @@ interface Props {
     (node: React.ReactNode): void;
   };
 }
-
-const randomNumberGenerator = (start: number, end: number) =>
-  Math.ceil(Math.abs(start + Math.random() * (end - start)));
 
 const generateId = () => `Select__${randomNumberGenerator(0, 100000)})`;
 

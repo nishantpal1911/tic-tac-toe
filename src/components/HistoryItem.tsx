@@ -83,10 +83,10 @@ export default function HistoryItem(props: HistoryItemProps) {
       <hr className='h-[1px] border-black' />
       <OutsideClickHandler onOutsideClick={() => setIsSelected(false)}>
         <Modal
-          headerText='Are you sure you want to reset history?'
-          isModalOpen={isResetModalOpen}
-          onConfirmBtnClick={onConfirmRestore}
-          onCancelBtnClick={onCancelRestore}
+          header='Are you sure you want to reset history?'
+          isOpen={isResetModalOpen}
+          onConfirm={onConfirmRestore}
+          onDismiss={onCancelRestore}
         />
         <div className={`flex ${bgStyleByPlayer}`}>
           <button onClick={onItemSelect} className={'w-full py-3'}>

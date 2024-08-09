@@ -1,5 +1,7 @@
 import { ComponentProps, PropsWithChildren, useEffect, useState } from 'react';
 
+import { randomNumberGenerator } from 'src/utils';
+
 interface InputProps {
   label?: string;
   onChangeValue: {
@@ -8,9 +10,6 @@ interface InputProps {
 }
 
 interface Props extends ComponentProps<'input'>, InputProps {}
-
-const randomNumberGenerator = (start: number, end: number) =>
-  Math.ceil(Math.abs(start + Math.random() * (end - start)));
 
 const generateId = () => `TextInput__${randomNumberGenerator(0, 100000)})`;
 
