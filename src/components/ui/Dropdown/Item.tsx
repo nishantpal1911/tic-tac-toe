@@ -9,7 +9,7 @@ interface Props extends Omit<ComponentProps<'button'>, 'onSelect'> {
   };
 }
 
-const styles = cva('w-full select-none px-4 py-2 text-start hover:bg-gray-100', {
+const styles = cva('w-full select-none px-4 py-2 text-start hover:bg-gray-50', {
   variants: {
     showBgOnSelected: { true: '' },
     isSelected: { true: '' },
@@ -18,7 +18,7 @@ const styles = cva('w-full select-none px-4 py-2 text-start hover:bg-gray-100', 
     {
       showBgOnSelected: true,
       isSelected: true,
-      className: 'bg-gray-100',
+      className: 'border-l-2 border-blue-200 bg-blue-50 pl-3.5 hover:bg-blue-50',
     },
   ],
 });

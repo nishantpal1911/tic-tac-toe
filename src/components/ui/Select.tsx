@@ -68,7 +68,7 @@ export default function Select(props: PropsWithChildren<Props>) {
           >
             {props.selectedOption ?
               <span>{props.selectedOption}</span>
-            : <span>{props.placeholder || 'Select option'}</span>}
+            : <span className='w-max'>{props.placeholder || 'Select option'}</span>}
           </Button>
           {props.children && (
             <>

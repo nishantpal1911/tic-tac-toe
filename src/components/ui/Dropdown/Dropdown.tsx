@@ -8,6 +8,7 @@ import css from 'src/styles/ui/Dropdown.module.css';
 interface Props {
   className?: string;
   isOpen?: boolean;
+  showBgOnSelected?: boolean;
   onSelect?: {
     (node: React.ReactNode): void;
   };
@@ -35,6 +36,11 @@ export default function Dropdown(props: PropsWithChildren<Props>) {
     }
   }, [props.isOpen]);
 
+  const childProps = {
+    onSelect: props.onSelect,
+    showBgOnSelected: props.showBgOnSelected,
+  };
+
   return (
     <div className='relative z-[5] h-0'>
       <OverlayScrollbarsComponent
@@ -49,8 +55,8 @@ export default function Dropdown(props: PropsWithChildren<Props>) {
         {isOpen &&
           props.children &&
           (Array.isArray(props.children) ?
-            props.children.map((child) => React.cloneElement(child, { onSelect: props.onSelect }))
-          : React.cloneElement(props.children as JSX.Element, { onSelct: props.onSelect }))}
+            props.children.map((child) => React.cloneElement(child, childProps))
+          : React.cloneElement(props.children as JSX.Element, childProps))}
       </OverlayScrollbarsComponent>
     </div>
   );

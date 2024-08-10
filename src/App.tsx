@@ -33,6 +33,7 @@ export default function App() {
     if (!isPlayed) {
       setBoardWidth(Number(input));
       setBoardKey(boardKey + 1);
+      toast.add({ message: 'Board width changed successfully!', type: 'success' });
     } else {
       setIsConfirmModalOpen(true);
     }
@@ -85,7 +86,7 @@ export default function App() {
       </Modal>
       <main className='flex'>
         <div className='mx-auto w-fit py-16'>
-          <div className='mb-6 flex items-center gap-3'>
+          <div className='mb-6 flex items-center justify-center gap-3'>
             <div>
               <Select
                 label='Select board width'
@@ -94,9 +95,9 @@ export default function App() {
                 onSelect={onSelectNum}
                 collapseOnSelect
               >
-                <Dropdown>
+                <Dropdown showBgOnSelected={true}>
                   {boardWidthOptions.map((value, index) => (
-                    <DropdownItem key={index} isSelected={value === Number(input)} showBgOnSelected={true}>
+                    <DropdownItem key={index} isSelected={value === Number(input)}>
                       {value}
                     </DropdownItem>
                   ))}
