@@ -1,6 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { cva } from 'class-variance-authority';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import Button from 'src/components/ui/Button';
 import { ProgressBar } from 'src/components/ui/Toast';
@@ -16,11 +16,11 @@ interface Props {
     (toast: IToast): void;
   };
   onRemoveToast: {
-    (id: number): void;
+    (id: string): void;
   };
 }
 
-const toastStyles = cva(`${css.transition} relative h-fit w-96 rounded-md bg-white opacity-0`, {
+const styles = cva(`${css.transition} relative h-fit w-96 rounded-md bg-white opacity-0`, {
   variants: {
     isVisible: {
       true: 'opacity-100',
@@ -28,7 +28,7 @@ const toastStyles = cva(`${css.transition} relative h-fit w-96 rounded-md bg-whi
   },
 });
 
-export default function Toast(props: Props) {
+const Toast = memo(function Toast(props: Props) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function Toast(props: Props) {
   return (
     <div
       key={props.toast.id}
-      className={toastStyles({ isVisible })}
+      className={styles({ isVisible })}
       onMouseEnter={() => props.onPauseToast(props.toast)}
       onMouseLeave={() => props.onResumeToast(props.toast)}
     >
@@ -54,4 +54,6 @@ export default function Toast(props: Props) {
       <ProgressBar toast={props.toast} />
     </div>
   );
-}
+});
+
+export default Toast;

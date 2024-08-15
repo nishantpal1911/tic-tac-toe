@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import History from 'src/components/History';
 import Square from 'src/components/Square';
@@ -34,11 +34,16 @@ const playsInARowToWin: Record<number, number> = {
 };
 
 export default function Board({ N, setIsPlayed }: BoardProps) {
-  const [board, setBoard] = useState(getInitialBoard(N));
-  const [tempBoard, setTempBoard] = useState(null as Cell[][] | null);
-  const [nextPlayer, setNextPlayer] = useState('X' as CellValue);
-  const [history, setHistory] = useState([] as Cell[]);
-  const [winner, setWinner] = useState('' as CellValue);
+  const [board, setBoard] = useState<Cell[][]>(() => getInitialBoard(N));
+  const [tempBoard, setTempBoard] = useState<Cell[][] | null>(null);
+  const [nextPlayer, setNextPlayer] = useState<CellValue>('X');
+  const [history, setHistory] = useState<Cell[]>([]);
+  const [winner, setWinner] = useState<CellValue>('');
+
+  useEffect(() => {
+    setBoard(getInitialBoard(N));
+  }, [N]);
+
   const isDisabled = !!winner || history.length === N * N || !!tempBoard;
 
   const checkRow = (cell: Cell, newBoard: Cell[][], fillCells?: boolean): boolean => {

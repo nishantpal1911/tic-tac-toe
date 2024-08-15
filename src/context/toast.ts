@@ -1,9 +1,9 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
 import { ToastOptions } from 'src/types/toast';
 
-const ToastContext = createContext({
+export const ToastContext = createContext({
   add: (options: ToastOptions) => {},
 });
 
-export default ToastContext;
+export const useToast = () => useContext(ToastContext);

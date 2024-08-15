@@ -1,9 +1,15 @@
-import { cva } from 'class-variance-authority';
-import { useEffect } from 'react';
+import { cva, VariantProps } from 'class-variance-authority';
+import { memo, useEffect } from 'react';
 
 import { Toast } from 'src/types/toast';
 
-export const styles = cva('absolute bottom-0 h-1 w-full rounded-bl-md rounded-br-md', {
+export type ProgressBarProps = VariantProps<typeof styles>;
+
+interface Props {
+  toast: Toast;
+}
+
+const styles = cva('absolute bottom-0 h-1 w-full rounded-bl-md rounded-br-md', {
   variants: {
     type: {
       success: 'bg-green-500',
@@ -17,13 +23,9 @@ export const styles = cva('absolute bottom-0 h-1 w-full rounded-bl-md rounded-br
   },
 });
 
-interface Props {
-  toast: Toast;
-}
-
-export default function ProgressBar({ toast }: Props) {
+const ProgressBar = memo(function ProgressBar({ toast }: Props) {
   useEffect(() => {
-    const element = document.getElementById(String(toast.id));
+    const element = document.getElementById(toast.id);
     if (!element) return;
 
     if (toast.pausedAt) {
@@ -42,7 +44,9 @@ export default function ProgressBar({ toast }: Props) {
         element.style.width = '0';
       }, 0);
     }
-  }, [toast.pausedAt]);
+  }, [toast.id, toast.pausedAt, toast.remainingTime]);
 
-  return <div id={String(toast.id)} className={styles({ type: toast.type })} />;
-}
+  return <div id={toast.id} className={styles({ type: toast.type })} />;
+});
+
+export default ProgressBar;

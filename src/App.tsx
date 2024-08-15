@@ -1,13 +1,10 @@
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ReplayIcon from '@mui/icons-material/Replay';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
 import Board from 'src/components/Board';
-import Button from 'src/components/ui/Button';
-import { Dropdown, DropdownItem } from 'src/components/ui/Dropdown';
-import Modal from 'src/components/ui/Modal';
-import Select from 'src/components/ui/Select';
-import ToastContext from 'src/context/toast';
+import { Button, Checkbox, Dropdown, DropdownItem, Modal, Select, TextInput } from 'src/components/ui';
+import { useToast } from 'src/context/toast';
 
 const boardWidthOptions = [3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -19,9 +16,14 @@ export default function App() {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isPlayed, setIsPlayed] = useState(false);
   const [boardKey, setBoardKey] = useState(0);
-  const toast = useContext(ToastContext);
+  const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
+  const toast = useToast();
 
-  const onSelectNum = (node: React.ReactNode) => {
+  const checkboxHandler = () => {
+    setShouldShowDropdown(!shouldShowDropdown);
+  };
+
+  const changeInputHandler = (node: React.ReactNode) => {
     const value = node as string;
     setInput(value);
     const numValue = Number(value);
@@ -86,42 +88,49 @@ export default function App() {
       </Modal>
       <main className='flex'>
         <div className='mx-auto w-fit py-16'>
-          <div className='mb-6 flex items-center justify-center gap-3'>
-            <div>
-              <Select
-                label='Select board width'
-                className='w-20'
-                selectedOption={input}
-                onSelect={onSelectNum}
-                collapseOnSelect
-              >
-                <Dropdown showBgOnSelected={true}>
-                  {boardWidthOptions.map((value, index) => (
-                    <DropdownItem key={index} isSelected={value === Number(input)}>
-                      {value}
-                    </DropdownItem>
-                  ))}
-                </Dropdown>
-              </Select>
-              <p className={`text-red-500 ${!isError && 'invisible'}`}>Invalid input!</p>
-            </div>
-            <div className='mt-2 flex w-fit justify-evenly gap-2'>
-              <Button
-                icon={{ svg: ReplayIcon }}
-                disabled={!isPlayed}
-                intent='secondary'
-                onClick={() => setIsResetModalOpen(true)}
-              >
-                Reset
-              </Button>
-              <Button
-                icon={{ svg: CheckCircleOutlineIcon, placement: 'right' }}
-                disabled={isError || boardWidth === Number(input)}
-                intent='primary'
-                onClick={onClickApplyButton}
-              >
-                Apply
-              </Button>
+          <div>
+            <Checkbox checked={shouldShowDropdown} onChange={checkboxHandler} className='mb-3'>
+              Dropdown
+            </Checkbox>
+            <div className='mb-6 flex items-center justify-center gap-3'>
+              <div>
+                {shouldShowDropdown ?
+                  <Select
+                    label='Select board width'
+                    className='w-20'
+                    selectedOption={input}
+                    onSelect={changeInputHandler}
+                    collapseOnSelect
+                  >
+                    <Dropdown showBgOnSelected={true}>
+                      {boardWidthOptions.map((value, index) => (
+                        <DropdownItem key={index} isSelected={value === Number(input)}>
+                          {value}
+                        </DropdownItem>
+                      ))}
+                    </Dropdown>
+                  </Select>
+                : <TextInput value={input} onChangeValue={changeInputHandler} label='Enter board width' />}
+                <p className={`text-red-500 ${!isError && 'invisible'}`}>Invalid input!</p>
+              </div>
+              <div className='mt-2 flex w-fit justify-evenly gap-2'>
+                <Button
+                  icon={{ svg: ReplayIcon }}
+                  disabled={!isPlayed}
+                  intent='secondary'
+                  onClick={() => setIsResetModalOpen(true)}
+                >
+                  Reset
+                </Button>
+                <Button
+                  icon={{ svg: CheckCircleOutlineIcon, placement: 'right' }}
+                  disabled={isError || boardWidth === Number(input)}
+                  intent='primary'
+                  onClick={onClickApplyButton}
+                >
+                  Apply
+                </Button>
+              </div>
             </div>
           </div>
 

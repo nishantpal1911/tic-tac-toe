@@ -1,13 +1,11 @@
-import { VariantProps } from 'class-variance-authority';
+import { ProgressBarProps } from 'src/components/ui/Toast/ProgressBar';
 
-import { styles } from 'src/components/ui/Toast/ProgressBar';
-
-export interface ToastOptions extends VariantProps<typeof styles> {
+export interface ToastOptions extends ProgressBarProps {
   message: string;
 }
 
 export interface Toast extends ToastOptions {
-  id: number;
+  id: string;
   timeout: NodeJS.Timeout;
   playedAt: number;
   remainingTime: number;

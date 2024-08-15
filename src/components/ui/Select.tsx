@@ -2,9 +2,9 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import React, { PropsWithChildren, useEffect, useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { v4 as uuidv4 } from 'uuid';
 
 import Button from 'src/components/ui/Button';
-import { randomNumberGenerator } from 'src/utils';
 
 interface Props {
   id?: string;
@@ -20,11 +20,11 @@ interface Props {
   };
 }
 
-const generateId = () => `Select__${randomNumberGenerator(0, 100000)})`;
+const generateId = () => `Select__${uuidv4()}`;
 
 export default function Select(props: PropsWithChildren<Props>) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [id, setId] = useState(props.id || generateId());
+  const [id, setId] = useState(() => props.id || generateId());
 
   useEffect(() => {
     setId(props.id || generateId());
@@ -44,14 +44,14 @@ export default function Select(props: PropsWithChildren<Props>) {
   };
 
   return (
-    <div>
+    <div className='flex flex-col'>
       {props.label && (
         <label className='pointer-events-none mb-2 inline-block' htmlFor={id}>
           {props.label}
         </label>
       )}
 
-      <div className='w-min'>
+      <div className={props.className}>
         <OutsideClickHandler onOutsideClick={handleOutsideClick}>
           <Button
             id={id}
@@ -63,8 +63,9 @@ export default function Select(props: PropsWithChildren<Props>) {
               styles: { fontSize: 'medium' },
             }}
             onClick={selectClickHandler}
-            className={`justify-between bg-white pl-4 pr-2 ${props.className}`}
+            className='justify-between bg-white pl-4 pr-2'
             disabled={props.disabled}
+            fullWidth
           >
             {props.selectedOption ?
               <span>{props.selectedOption}</span>

@@ -1,8 +1,8 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { ComponentProps, useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import TextInput from 'src/components/ui/TextInput';
-import { randomNumberGenerator } from 'src/utils';
 
 interface InputProps {
   label?: string;
@@ -13,10 +13,10 @@ interface InputProps {
 
 interface Props extends ComponentProps<'input'>, InputProps {}
 
-const generateId = () => `SearchBox__${randomNumberGenerator(0, 100000)})`;
+const generateId = () => `SearchBox__${uuidv4()}`;
 
 export default function SearchBox(props: Props) {
-  const [id, setId] = useState(props.id || generateId());
+  const [id, setId] = useState(() => props.id || generateId());
 
   useEffect(() => {
     setId(props.id || generateId());
